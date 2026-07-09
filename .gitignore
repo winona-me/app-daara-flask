@@ -1,0 +1,83 @@
+# ============================
+# Environnement virtuel Python
+# ============================
+venv/
+env/
+.venv/
+ENV/
+
+# Fichiers Python compilés
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Variables d'environnement / secrets
+.env
+.env.*
+.flaskenv
+
+# Migrations Alembic — à garder généralement, sauf indication contraire du prof
+# migrations/
+
+# Base de données locale (tests SQLite)
+*.db
+*.sqlite
+*.sqlite3
+
+# ============================
+# IDE - VSCode
+# ============================
+.vscode/
+!.vscode/extensions.json
+
+# ============================
+# IDE - PyCharm / IntelliJ IDEA
+# ============================
+.idea/
+*.iml
+*.iws
+out/
+.idea_modules/
+
+# ============================
+# IDE - fichiers génériques
+# ============================
+*.swp
+*.swo
+*~
+
+# ============================
+# Fichiers système
+# ============================
+# Windows
+Thumbs.db
+desktop.ini
+# macOS
+.DS_Store
+# Linux
+*~
+
+# ============================
+# Logs
+# ============================
+*.log
+logs/
+
+# ============================
+# Distribution / packaging Python
+# ============================
+build/
+dist/
+*.egg-info/
+*.egg
+
+# ============================
+# Java / Maven (si projet mixte)
+# ============================
+target/
+*.class
+
+# ============================
+# Node (si front-end présent)
+# ============================
+node_modules/
