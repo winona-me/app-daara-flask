@@ -81,3 +81,4 @@ target/
 # Node (si front-end présent)
 # ============================
 node_modules/
+migrations/
