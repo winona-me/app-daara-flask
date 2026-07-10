@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{% if maitre %}Modifier{% else %}Ajouter{% endif %} un maître{% endblock %}
+{% block content %}
+<h1>{% if maitre %}Modifier{% else %}Ajouter{% endif %} un maître</h1>
+
+<form method="post">
+    {{ form.hidden_tag() }}
+
+    <label>{{ form.matricule.label }}</label>
+    {{ form.matricule(readonly=maitre is not none) }}
+    {% for error in form.matricule.errors %}<small style="color:red;">{{ error }}</small>{% endfor %}
+
+    <label>{{ form.prenom.label }}</label>
+    {{ form.prenom() }}
+    {% for error in form.prenom.errors %}<small style="color:red;">{{ error }}</small>{% endfor %}
+
+    <label>{{ form.nom.label }}</label>
+    {{ form.nom() }}
+    {% for error in form.nom.errors %}<small style="color:red;">{{ error }}</small>{% endfor %}
+
+    <label>{{ form.telephone.label }}</label>
+    {{ form.telephone() }}
+
+    <p>{{ form.submit(class="btn btn-primary") }}</p>
+</form>
+{% endblock %}
