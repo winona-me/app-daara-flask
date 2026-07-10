@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Progressions — Daara{% endblock %}
+{% block content %}
+<h1>Progressions</h1>
+
+<form method="get" action="{{ url_for('progressions.lister') }}">
+    <select name="talibe">
+        <option value="">Tous les talibés</option>
+        {% for t in talibes %}
+        <option value="{{ t.matricule }}" {% if t.matricule == talibe_matricule %}selected{% endif %}>{{ t.prenom }} {{ t.nom }}</option>
+        {% endfor %}
+    </select>
+    <button class="btn btn-primary" type="submit">Filtrer</button>
+    <a class="btn" href="{{ url_for('progressions.lister') }}">Réinitialiser</a>
+</form>
+
+<p>
+    <a class="btn btn-primary" href="{{ url_for('progressions.creer') }}">+ Ajouter une progression</a>
+    <a class="btn" href="{{ url_for('progressions.exporter', talibe=talibe_matricule) }}">Exporter CSV</a>
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Sourate</th>
+            <th>Versets</th>
+            <th>Date</th>
+            <th>Talibé</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in progressions %}
+        <tr>
+            <td>{{ p.sourate }}</td>
+            <td>{{ p.nombre_versets }}</td>
+            <td>{{ p.date_evaluation or '-' }}</td>
+            <td>{{ p.talibe.prenom }} {{ p.talibe.nom }}</td>
+            <td>
+                <a class="btn" href="{{ url_for('progressions.modifier', id=p.id) }}">Modifier</a>
+                <form class="inline" method="post" action="{{ url_for('progressions.supprimer', id=p.id) }}">
+                    <button class="btn btn-danger" onclick="return confirm('Supprimer cette progression ?')">Supprimer</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5">Aucune progression enregistrée.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
