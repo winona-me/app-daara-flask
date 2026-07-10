@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}{% if progression %}Modifier{% else %}Ajouter{% endif %} une progression{% endblock %}
+{% block content %}
+<h1>{% if progression %}Modifier{% else %}Ajouter{% endif %} une progression</h1>
+
+<form method="post">
+    {{ form.hidden_tag() }}
+
+    <label>{{ form.sourate.label }}</label>
+    {{ form.sourate() }}
+    {% for error in form.sourate.errors %}<small style="color:red;">{{ error }}</small>{% endfor %}
+
+    <label>{{ form.nombre_versets.label }}</label>
+    {{ form.nombre_versets() }}
+    {% for error in form.nombre_versets.errors %}<small style="color:red;">{{ error }}</small>{% endfor %}
+
+    <label>{{ form.date_evaluation.label }}</label>
+    {{ form.date_evaluation() }}
+
+    <label>{{ form.observations.label }}</label>
+    {{ form.observations() }}
+
+    <label>{{ form.talibe_matricule.label }}</label>
+    {{ form.talibe_matricule() }}
+    {% for error in form.talibe_matricule.errors %}<small style="color:red;">{{ error }}</small>{% endfor %}
+
+    <p>{{ form.submit(class="btn btn-primary") }}</p>
+</form>
+{% endblock %}
