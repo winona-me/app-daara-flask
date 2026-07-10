@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{% if classe %}Modifier{% else %}Ajouter{% endif %} une classe{% endblock %}
+{% block content %}
+<h1>{% if classe %}Modifier{% else %}Ajouter{% endif %} une classe</h1>
+
+<form method="post">
+    {{ form.hidden_tag() }}
+
+    <label>{{ form.code.label }}</label>
+    {{ form.code(readonly=classe is not none) }}
+    {% for error in form.code.errors %}<small style="color:red;">{{ error }}</small>{% endfor %}
+
+    <label>{{ form.libelle.label }}</label>
+    {{ form.libelle() }}
+    {% for error in form.libelle.errors %}<small style="color:red;">{{ error }}</small>{% endfor %}
+
+    <label>{{ form.niveau.label }}</label>
+    {{ form.niveau() }}
+
+    <label>{{ form.maitre_matricule.label }}</label>
+    {{ form.maitre_matricule() }}
+    {% for error in form.maitre_matricule.errors %}<small style="color:red;">{{ error }}</small>{% endfor %}
+
+    <p>{{ form.submit(class="btn btn-primary") }}</p>
+</form>
+{% endblock %}
