@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Modifier' if progression else 'Ajouter' }} une progression{% endblock %}
+{% block content %}
+
+<h2 class="mb-4">
+    <i class="bi bi-graph-up-arrow me-2"></i>{{ 'Modifier la progression' if progression else 'Ajouter une progression' }}
+</h2>
+
+<div class="card shadow-sm" style="max-width: 640px;">
+<div class="card-body">
+<form method="post" novalidate>
+    {{ form.hidden_tag() }}
+
+    <div class="mb-3">
+        <label class="form-label">{{ form.talibe_matricule.label }}</label>
+        {{ form.talibe_matricule(class="form-select" + (" is-invalid" if form.talibe_matricule.errors else "")) }}
+        {% for e in form.talibe_matricule.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 mb-3">
+            <label class="form-label">{{ form.sourate.label }}</label>
+            {{ form.sourate(class="form-control" + (" is-invalid" if form.sourate.errors else "")) }}
+            {% for e in form.sourate.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label">{{ form.nombre_versets.label }}</label>
+            {{ form.nombre_versets(class="form-control" + (" is-invalid" if form.nombre_versets.errors else "")) }}
+            {% for e in form.nombre_versets.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">{{ form.date_evaluation.label }}</label>
+        {{ form.date_evaluation(class="form-control" + (" is-invalid" if form.date_evaluation.errors else ""), type="date") }}
+        {% for e in form.date_evaluation.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">{{ form.observations.label }}</label>
+        {{ form.observations(class="form-control" + (" is-invalid" if form.observations.errors else ""), rows="3") }}
+        {% for e in form.observations.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+    </div>
+
+    <div class="d-flex gap-2 mt-4">
+        {{ form.submit(class="btn btn-daara") }}
+        <a href="{{ url_for('progressions.lister') }}" class="btn btn-outline-secondary">Annuler</a>
+    </div>
+</form>
+</div>
+</div>
+{% endblock %}

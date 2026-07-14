@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Talibés{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h2><i class="bi bi-people me-2"></i>Talibés</h2>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('talibes.exporter', q=q, classe=classe_code) }}" class="btn btn-outline-secondary">
+            <i class="bi bi-download me-1"></i>Exporter CSV
+        </a>
+        <a href="{{ url_for('talibes.creer') }}" class="btn btn-daara">
+            <i class="bi bi-plus-lg me-1"></i>Nouveau talibé
+        </a>
+    </div>
+</div>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-auto flex-grow-1">
+        <input type="text" name="q" value="{{ q }}" class="form-control"
+               placeholder="Rechercher par nom, prénom ou matricule...">
+    </div>
+    <div class="col-auto">
+        <select name="classe" class="form-select">
+            <option value="">Toutes les classes</option>
+            {% for c in classes %}
+                <option value="{{ c.code }}" {% if c.code == classe_code %}selected{% endif %}>
+                    {{ c.libelle }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-daara"><i class="bi bi-search"></i> Rechercher</button>
+        <a href="{{ url_for('talibes.lister') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-counterclockwise"></i> Réinitialiser
+        </a>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-daara table-hover align-middle bg-white shadow-sm rounded">
+        <thead>
+            <tr>
+                <th>Matricule</th>
+                <th>Prénom</th>
+                <th>Nom</th>
+                <th>Date de naissance</th>
+                <th>Classe</th>
+                <th>Tuteur</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for t in talibes %}
+            <tr>
+                <td><span class="badge bg-secondary">{{ t.matricule }}</span></td>
+                <td>{{ t.prenom }}</td>
+                <td>{{ t.nom }}</td>
+                <td>{{ t.date_naissance.strftime('%d/%m/%Y') if t.date_naissance else '—' }}</td>
+                <td>{{ t.classe.libelle }}</td>
+                <td>{{ t.nom_tuteur or '—' }}</td>
+                <td class="text-end">
+                    <a href="{{ url_for('talibes.modifier', matricule=t.matricule) }}"
+                       class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                    <form method="post" action="{{ url_for('talibes.supprimer', matricule=t.matricule) }}"
+                          class="d-inline">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('Supprimer ce talibé ? Toutes ses progressions seront également supprimées.');">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="7" class="text-center text-muted py-4">Aucun talibé trouvé.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

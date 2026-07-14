@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Progressions — Daara{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h2><i class="bi bi-graph-up-arrow me-2"></i>Progressions</h2>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('progressions.exporter', talibe=talibe_matricule) }}" class="btn btn-outline-secondary">
+            <i class="bi bi-download me-1"></i>Exporter CSV
+        </a>
+        <a href="{{ url_for('progressions.creer') }}" class="btn btn-daara">
+            <i class="bi bi-plus-lg me-1"></i>Ajouter une progression
+        </a>
+    </div>
+</div>
+
+<form method="get" action="{{ url_for('progressions.lister') }}" class="row g-2 mb-3">
+    <div class="col-auto flex-grow-1">
+        <select name="talibe" class="form-select">
+            <option value="">Tous les talibés</option>
+            {% for t in talibes %}
+                <option value="{{ t.matricule }}" {% if t.matricule == talibe_matricule %}selected{% endif %}>
+                    {{ t.prenom }} {{ t.nom }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-daara"><i class="bi bi-funnel"></i> Filtrer</button>
+        <a href="{{ url_for('progressions.lister') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-counterclockwise"></i> Réinitialiser
+        </a>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-daara table-hover align-middle bg-white shadow-sm rounded">
+        <thead>
+            <tr>
+                <th>Sourate</th>
+                <th>Versets</th>
+                <th>Date</th>
+                <th>Talibé</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for p in progressions %}
+            <tr>
+                <td>{{ p.sourate }}</td>
+                <td><span class="badge bg-secondary">{{ p.nombre_versets }}</span></td>
+                <td>{{ p.date_evaluation.strftime('%d/%m/%Y') if p.date_evaluation else '—' }}</td>
+                <td>{{ p.talibe.prenom }} {{ p.talibe.nom }}</td>
+                <td class="text-end">
+                    <a href="{{ url_for('progressions.modifier', id=p.id) }}"
+                       class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                    <form method="post" action="{{ url_for('progressions.supprimer', id=p.id) }}"
+                          class="d-inline">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('Supprimer cette progression ?');">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="5" class="text-center text-muted py-4">Aucune progression enregistrée.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
