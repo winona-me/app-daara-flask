@@ -1,46 +1,67 @@
 {% extends "base.html" %}
 {% block title %}Classes — Daara{% endblock %}
 {% block content %}
-<h1>Classes</h1>
 
-<form method="get" action="{{ url_for('classes.lister') }}">
-    <input type="text" name="q" value="{{ q }}" placeholder="Rechercher par libellé">
-    <button class="btn btn-primary" type="submit">Rechercher</button>
-    <a class="btn" href="{{ url_for('classes.lister') }}">Réinitialiser</a>
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <h2><i class="bi bi-collection me-2"></i>Classes</h2>
+    <div class="d-flex gap-2">
+        <a href="{{ url_for('classes.exporter', q=q) }}" class="btn btn-outline-secondary">
+            <i class="bi bi-download me-1"></i>Exporter CSV
+        </a>
+        <a href="{{ url_for('classes.creer') }}" class="btn btn-daara">
+            <i class="bi bi-plus-lg me-1"></i>Ajouter une classe
+        </a>
+    </div>
+</div>
+
+<form method="get" action="{{ url_for('classes.lister') }}" class="row g-2 mb-3">
+    <div class="col-auto flex-grow-1">
+        <input type="text" name="q" value="{{ q }}" class="form-control"
+               placeholder="Rechercher par libellé...">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-daara"><i class="bi bi-search"></i> Rechercher</button>
+        <a href="{{ url_for('classes.lister') }}" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-counterclockwise"></i> Réinitialiser
+        </a>
+    </div>
 </form>
 
-<p>
-    <a class="btn btn-primary" href="{{ url_for('classes.creer') }}">+ Ajouter une classe</a>
-    <a class="btn" href="{{ url_for('classes.exporter', q=q) }}">Exporter CSV</a>
-</p>
-
-<table>
-    <thead>
-        <tr>
-            <th>Code</th>
-            <th>Libellé</th>
-            <th>Niveau</th>
-            <th>Maître</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
+<div class="table-responsive">
+    <table class="table table-daara table-hover align-middle bg-white shadow-sm rounded">
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Libellé</th>
+                <th>Niveau</th>
+                <th>Maître</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for c in classes %}
-        <tr>
-            <td>{{ c.code }}</td>
-            <td>{{ c.libelle }}</td>
-            <td>{{ c.niveau or '-' }}</td>
-            <td>{{ c.maitre.prenom }} {{ c.maitre.nom }}</td>
-            <td>
-                <a class="btn" href="{{ url_for('classes.modifier', code=c.code) }}">Modifier</a>
-                <form class="inline" method="post" action="{{ url_for('classes.supprimer', code=c.code) }}">
-                    <button class="btn btn-danger" onclick="return confirm('Supprimer cette classe ?')">Supprimer</button>
-                </form>
-            </td>
-        </tr>
+            <tr>
+                <td><span class="badge bg-secondary">{{ c.code }}</span></td>
+                <td>{{ c.libelle }}</td>
+                <td>{{ c.niveau or '—' }}</td>
+                <td>{{ c.maitre.prenom }} {{ c.maitre.nom }}</td>
+                <td class="text-end">
+                    <a href="{{ url_for('classes.modifier', code=c.code) }}"
+                       class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                    <form method="post" action="{{ url_for('classes.supprimer', code=c.code) }}"
+                          class="d-inline">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                onclick="return confirm('Supprimer cette classe ?');">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
         {% else %}
-        <tr><td colspan="5">Aucune classe enregistrée.</td></tr>
+            <tr><td colspan="5" class="text-center text-muted py-4">Aucune classe enregistrée.</td></tr>
         {% endfor %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
 {% endblock %}

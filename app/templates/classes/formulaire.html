@@ -1,26 +1,50 @@
 {% extends "base.html" %}
-{% block title %}{% if classe %}Modifier{% else %}Ajouter{% endif %} une classe{% endblock %}
+{% block title %}{{ 'Modifier' if classe else 'Ajouter' }} une classe{% endblock %}
 {% block content %}
-<h1>{% if classe %}Modifier{% else %}Ajouter{% endif %} une classe</h1>
 
-<form method="post">
+<h2 class="mb-4">
+    <i class="bi bi-collection me-2"></i>{{ 'Modifier la classe' if classe else 'Ajouter une classe' }}
+</h2>
+
+<div class="card shadow-sm" style="max-width: 640px;">
+<div class="card-body">
+<form method="post" novalidate>
     {{ form.hidden_tag() }}
 
-    <label>{{ form.code.label }}</label>
-    {{ form.code(readonly=classe is not none) }}
-    {% for error in form.code.errors %}<small style="color:red;">{{ error }}</small>{% endfor %}
+    <div class="mb-3">
+        <label class="form-label">{{ form.code.label }}</label>
+        {% if classe %}
+            <input type="text" class="form-control" value="{{ classe.code }}" readonly>
+        {% else %}
+            {{ form.code(class="form-control" + (" is-invalid" if form.code.errors else "")) }}
+            {% for e in form.code.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+        {% endif %}
+    </div>
 
-    <label>{{ form.libelle.label }}</label>
-    {{ form.libelle() }}
-    {% for error in form.libelle.errors %}<small style="color:red;">{{ error }}</small>{% endfor %}
+    <div class="row">
+        <div class="col-md-8 mb-3">
+            <label class="form-label">{{ form.libelle.label }}</label>
+            {{ form.libelle(class="form-control" + (" is-invalid" if form.libelle.errors else "")) }}
+            {% for e in form.libelle.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="col-md-4 mb-3">
+            <label class="form-label">{{ form.niveau.label }}</label>
+            {{ form.niveau(class="form-control" + (" is-invalid" if form.niveau.errors else "")) }}
+            {% for e in form.niveau.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+        </div>
+    </div>
 
-    <label>{{ form.niveau.label }}</label>
-    {{ form.niveau() }}
+    <div class="mb-3">
+        <label class="form-label">{{ form.maitre_matricule.label }}</label>
+        {{ form.maitre_matricule(class="form-select" + (" is-invalid" if form.maitre_matricule.errors else "")) }}
+        {% for e in form.maitre_matricule.errors %}<div class="invalid-feedback">{{ e }}</div>{% endfor %}
+    </div>
 
-    <label>{{ form.maitre_matricule.label }}</label>
-    {{ form.maitre_matricule() }}
-    {% for error in form.maitre_matricule.errors %}<small style="color:red;">{{ error }}</small>{% endfor %}
-
-    <p>{{ form.submit(class="btn btn-primary") }}</p>
+    <div class="d-flex gap-2 mt-4">
+        {{ form.submit(class="btn btn-daara") }}
+        <a href="{{ url_for('classes.lister') }}" class="btn btn-outline-secondary">Annuler</a>
+    </div>
 </form>
+</div>
+</div>
 {% endblock %}

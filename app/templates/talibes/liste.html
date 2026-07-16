@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% block titre %}Talibés{% endblock %}
-{% block contenu %}
+{% block title %}Talibés{% endblock %}
+{% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
     <h2><i class="bi bi-people me-2"></i>Talibés</h2>
@@ -64,6 +64,7 @@
                        class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
                     <form method="post" action="{{ url_for('talibes.supprimer', matricule=t.matricule) }}"
                           class="d-inline">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <button type="submit" class="btn btn-sm btn-outline-danger"
                                 onclick="return confirm('Supprimer ce talibé ? Toutes ses progressions seront également supprimées.');">
                             <i class="bi bi-trash"></i>
